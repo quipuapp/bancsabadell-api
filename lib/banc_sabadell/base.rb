@@ -22,10 +22,7 @@ module BancSabadell
       @updated_at = Time.at(updated_at) if updated_at
     end
 
-    def self.url_keyword
-    end
-
-    def self.attribute_translations
+    def self.scope_attribute
     end
   end
 end

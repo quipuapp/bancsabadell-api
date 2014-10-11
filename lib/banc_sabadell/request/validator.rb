@@ -10,6 +10,9 @@ module BancSabadell
 
       def validated_data_for(incoming_response)
         self.response = incoming_response
+        puts "-----BODY-----"
+        p response.body
+        puts "---END-BODY---"
         verify_response_code
         info.data = JSON.parse(response.body)
         validate_response_data

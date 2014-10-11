@@ -3,9 +3,10 @@ module BancSabadell
     #include BancSabadell::Operations::Delete
     #include BancSabadell::Operations::Update
 
-    attr_accessor :owner, :description, :user, :iban, :balance, :product, :product_number, :product_id
+    attr_accessor :owner, :description, :user, :iban, :balance,
+      :product, :product_number, :product_id
 
-    def self.url_keyword
+    def self.generate_url_keyword(_=nil)
       'productos'
     end
 

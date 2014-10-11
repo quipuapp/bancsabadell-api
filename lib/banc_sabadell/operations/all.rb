@@ -3,18 +3,19 @@ module BancSabadell
     module All
       module ClassMethods
         def all(options = {})
-          results_from BancSabadell.request(:get, url_keyword, options)
+          keyword_options = options.delete(scope_attribute)
+          results_from BancSabadell.request(:get, generate_url_keyword(keyword_options), options)
         end
 
         private
 
         def results_from(response)
-          response['data'].map do |row|
+          (response['data'] || []).map do |row|
             treated_row = row.map do |key, value|
-              { self.attribute_translations[key.to_sym].to_s => value }
+              { attribute_translations[key.to_sym].to_s => value }
             end.inject(:merge)
 
-            self.new(treated_row)
+            new(treated_row)
           end
         end
       end
