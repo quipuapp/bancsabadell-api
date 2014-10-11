@@ -1,5 +1,5 @@
 module BancSabadell
-  class Transaction < Base
+  class AccountTransaction < Base
     #include BancSabadell::Operations::Delete
     #include BancSabadell::Operations::Update
 

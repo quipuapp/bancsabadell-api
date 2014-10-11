@@ -16,7 +16,7 @@ module BancSabadell
 
   autoload :Base, 'banc_sabadell/base'
   autoload :Product, 'banc_sabadell/product'
-  autoload :Transaction, 'banc_sabadell/transaction'
+  autoload :AccountTransaction, 'banc_sabadell/account_transaction'
 
   module Operations
     autoload :All, 'banc_sabadell/operations/all'

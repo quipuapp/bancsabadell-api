@@ -23,6 +23,12 @@ module BancSabadell
       private
 
       def https_request
+        if @info.http_method == :get
+          @info.data.merge!(access_token: BancSabadell.api_key)
+        else
+          @info.url += "?access_token=#{BancSabadell.api_key}"
+        end
+
         https_request = case @info.http_method
                         when :post
                           Net::HTTP::Post.new(@info.url)

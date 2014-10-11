@@ -10,7 +10,7 @@ module BancSabadell
       end
 
       def url
-        "/ResourcesServerBS/oauthservices/#{BancSabadell.api_version}/#{api_url}?access_token=#{BancSabadell.api_key}"
+        "/ResourcesServerBS/oauthservices/#{BancSabadell.api_version}/#{api_url}"
       end
 
       def path_with_params(path, params)
