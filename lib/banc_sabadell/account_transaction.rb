@@ -1,8 +1,5 @@
 module BancSabadell
   class AccountTransaction < Base
-    #include BancSabadell::Operations::Delete
-    #include BancSabadell::Operations::Update
-
     attr_accessor :order_number, :operation_date, :value_date,
       :amount, :currency, :accumulated_amount, :concept,
       :concept_code
