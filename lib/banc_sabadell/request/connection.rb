@@ -23,12 +23,6 @@ module BancSabadell
       private
 
       def https_request
-        if @info.http_method == :get
-          @info.data.merge!(access_token: BancSabadell.api_key)
-        else
-          @info.url += "?access_token=#{BancSabadell.api_key}"
-        end
-
         https_request = case @info.http_method
                         when :post
                           Net::HTTP::Post.new(@info.url)
@@ -39,6 +33,8 @@ module BancSabadell
                         else
                           Net::HTTP::Get.new(@info.path_with_params(@info.url, @info.data))
                         end
+
+        https_request["Authorization"] = "Bearer #{BancSabadell.api_key}"
 
         if [:post, :put].include?(@info.http_method)
           https_request.set_form_data(normalize_params(@info.data))
@@ -59,4 +55,3 @@ module BancSabadell
     end
   end
 end
-

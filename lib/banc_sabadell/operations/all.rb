@@ -4,7 +4,7 @@ module BancSabadell
       module ClassMethods
         def all(options = {})
           keyword_options = options.delete(scope_attribute)
-          results_from BancSabadell.request(:get, generate_url_keyword(keyword_options), options)
+          results_from BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
         end
 
         private
