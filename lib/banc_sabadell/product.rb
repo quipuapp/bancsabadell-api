@@ -19,5 +19,9 @@ module BancSabadell
         numeroProductoCodificado: :product_id
       }
     end
+
+    def account_transactions(opts = {})
+      AccountTransaction.all(opts.merge(product_number: product_number))
+    end
   end
 end
