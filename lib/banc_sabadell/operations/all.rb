@@ -4,7 +4,16 @@ module BancSabadell
       module ClassMethods
         def all(options = {})
           keyword_options = options.delete(scope_attribute)
-          results_from BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
+
+          response = BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
+
+          while more_pages?(response)
+            new_response = BancSabadell.request(:post, generate_url_keyword(keyword_options), options.merge(page: 'next'))
+            response['data'].concat(new_response['data'])
+            response['head'] = new_response['head']
+          end
+
+          results_from response
         end
 
         private
@@ -17,6 +26,13 @@ module BancSabadell
 
             new(treated_row)
           end
+        end
+
+        # amazing
+        def more_pages?(response)
+          response['head'] &&
+          response['head']['warnCode'] &&
+          response['head']['warnCode'] == "WARN-MOV-001"
         end
       end
 
