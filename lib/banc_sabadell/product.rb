@@ -21,8 +21,8 @@ module BancSabadell
     end
 
     def account_transactions(opts = {})
-      AccountTransaction.all(opts.merge(product_data: { product_number: product_number,
-                                                        product_type: self.class.generate_url_keyword }))
+      AccountTransaction.query(opts.merge(product_data: { product_number: product_number,
+                                                          product_type: self.class.generate_url_keyword }))
     end
   end
 end
