@@ -22,6 +22,7 @@ module BancSabadell
 
   module Operations
     autoload :All, 'banc_sabadell/operations/all'
+    autoload :Query, 'banc_sabadell/operations/query'
   end
 
   module Request

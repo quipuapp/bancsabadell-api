@@ -1,6 +1,7 @@
 module BancSabadell
   class Base
     include BancSabadell::Operations::All
+    include BancSabadell::Operations::Query
 
     attr_accessor :created_at, :updated_at
 
