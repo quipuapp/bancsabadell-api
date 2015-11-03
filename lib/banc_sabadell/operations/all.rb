@@ -5,15 +5,17 @@ module BancSabadell
         def all(options = {})
           keyword_options = options.delete(scope_attribute)
 
-          response = BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
+          req = BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
+          res = req.perform
 
-          while more_pages?(response)
-            new_response = BancSabadell.request(:post, generate_url_keyword(keyword_options), options.merge(page: 'next'))
-            response['data'].concat(new_response['data'])
-            response['head'] = new_response['head']
+          while req.more_pages?
+            new_req = BancSabadell.request(:post, generate_url_keyword(keyword_options), options.merge(page: 'next'))
+            new_res = new_req.perform
+            res['data'].concat(new_res['data'])
+            res['head'] = new_res['head']
           end
 
-          results_from response
+          results_from res
         end
 
         private
@@ -26,13 +28,6 @@ module BancSabadell
 
             new(treated_row)
           end
-        end
-
-        # amazing
-        def more_pages?(response)
-          response['head'] &&
-          response['head']['warnCode'] &&
-          response['head']['warnCode'] == "WARN-MOV-001"
         end
       end
 

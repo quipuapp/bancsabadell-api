@@ -59,7 +59,11 @@ module BancSabadell
 
   def self.request(http_method, api_url, data)
     info = Request::Info.new(http_method, api_url, data)
-    Request::Base.new(info).perform
+    req = Request::Base.new(info)
+  end
+
+  def self.perform(req)
+    req.perform
   end
 
   def self.obtain_refresh_token_data(client_id, client_secret, refresh_token)

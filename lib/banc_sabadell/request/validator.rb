@@ -1,32 +1,29 @@
 module BancSabadell
   module Request
     class Validator
-      attr_reader :info
-      attr_accessor :response
+      def validate_response(response)
+        code = response.code.to_i
 
-      def initialize(info)
-        @info = info
+        raise AuthenticationError.new('Unauthorized') if code == 401
+        raise APIError.new('Server Error') if code >= 500
       end
 
-      def validated_data_for(incoming_response)
-        self.response = incoming_response
-        verify_response_code
-        info.data = JSON.parse(response.body)
-        validate_response_data
-        info.data
-      end
+      def validate_response_data(response_data)
+        rd = response_data
 
-      protected
-
-      def verify_response_code
-        raise AuthenticationError if response.code.to_i == 401
-        raise APIError if response.code.to_i >= 500
-      end
-
-      def validate_response_data
-        raise APIError.new(info.data["error"]) if info.data["error"]
+        if rd
+          if rd["data"] &&
+             rd["data"].is_a?(Hash) &&
+             rd["data"]["error"]
+               raise APIError.new(rd["data"]["error"])
+          elsif rd["head"] &&
+                rd["head"]["errorCode"]
+            raise APIError.new(rd["head"]["descripcionError"])
+          end
+        else
+          raise APIError.new("Empty Response from API")
+        end
       end
     end
   end
 end
-
