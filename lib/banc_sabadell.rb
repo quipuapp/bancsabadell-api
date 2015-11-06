@@ -69,16 +69,16 @@ module BancSabadell
   def self.obtain_refresh_token_data(client_id, client_secret, refresh_token)
     https = Net::HTTP.new(BancSabadell.api_base, BancSabadell.api_port)
     https.use_ssl = true
-    https.verify_mode = OpenSSL::SSL::VERIFY_NONE # TODO remove it
+    https.verify_mode = OpenSSL::SSL::VERIFY_NONE # TODO: remove it
 
     https_request = Net::HTTP::Post.new('/AuthServerBS/oauth/token')
     https_request.set_form_data(grant_type: 'refresh_token', refresh_token: refresh_token)
-    https_request['Authorization'] = 'Basic ' + Base64.encode64("#{client_id}:#{client_secret}").gsub("\n", '')
+    https_request['Authorization'] = "Basic #{Base64.encode64("#{client_id}:#{client_secret}").delete("\n")}"
 
     response = https.request(https_request)
 
     if response.code.to_s[0] == '4'
-      raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
+      fail AuthenticationError.new(raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
     end
 
     begin
