@@ -59,7 +59,7 @@ module BancSabadell
 
   def self.request(http_method, api_url, data)
     info = Request::Info.new(http_method, api_url, data)
-    req = Request::Base.new(info)
+    Request::Base.new(info)
   end
 
   def self.perform(req)

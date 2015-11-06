@@ -5,14 +5,14 @@ module BancSabadell
       module ClassMethods
         def query(options = {})
           keyword_options = options.delete(scope_attribute)
+          more_pages_container = options.delete(:more_pages_container)
 
           req = BancSabadell.request(:post, generate_url_keyword(keyword_options), options)
           res = req.perform
-          has_more_pages = req.more_pages?
+          more_pages_container.has_more_pages = req.more_pages? if more_pages_container
 
           results_from res
         end
-
 
         def next_page(options = {})
           query(options.merge(page: 'next')) if has_more_pages
