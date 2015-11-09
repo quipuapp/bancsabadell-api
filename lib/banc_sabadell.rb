@@ -78,7 +78,7 @@ module BancSabadell
     response = https.request(https_request)
 
     if response.code.to_s[0] == '4'
-      fail AuthenticationError.new(raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
+      fail raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
     end
 
     begin
