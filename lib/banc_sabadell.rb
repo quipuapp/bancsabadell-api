@@ -5,7 +5,8 @@ require 'banc_sabadell/version'
 require 'logger'
 
 module BancSabadell
-  API_BASE = 'developers.bancsabadell.com'
+  API_BASE = 'oauth.bancsabadell.com'
+  API_SANDBOX_BASE = 'developers.bancsabadell.com'
   API_VERSION = 'v1.0.0'
 
   @@api_key = nil
@@ -49,6 +50,14 @@ module BancSabadell
     @@api_base
   end
 
+  def self.sandbox!
+    @@api_base = API_SANDBOX_BASE
+  end
+
+  def self.unsandbox!
+    @@api_base = API_BASE
+  end
+
   def self.api_version
     @@api_version
   end
@@ -78,7 +87,7 @@ module BancSabadell
     response = https.request(https_request)
 
     if response.code.to_s[0] == '4'
-      fail raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
+      raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
     end
 
     begin
