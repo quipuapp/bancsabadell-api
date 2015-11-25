@@ -9,8 +9,11 @@ module BancSabadell
           res = req.perform
 
           while req.more_pages?
+            sleep(BancSabadell::API_THROTTLE_LIMIT)
+
             new_req = BancSabadell.request(:post, generate_url_keyword(keyword_options), options.merge(page: 'next'))
             new_res = new_req.perform
+
             res['data'].concat(new_res['data'])
             res['head'] = new_res['head']
           end
