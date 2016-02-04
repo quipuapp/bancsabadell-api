@@ -23,8 +23,8 @@ module BancSabadell
         def results_from(res)
           (res['data'] || []).map do |row|
             treated_row = row.map do |key, value|
-              { attribute_translations[key.to_sym].to_s => value }
-            end.inject(:merge)
+              { attribute_translations[key.to_sym].to_s => value } if attribute_translations[key.to_sym]
+            end.compact.inject(:merge)
 
             new(treated_row)
           end

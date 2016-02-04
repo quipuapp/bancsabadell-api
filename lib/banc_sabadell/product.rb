@@ -1,7 +1,8 @@
 module BancSabadell
   class Product < Base
     attr_accessor :owner, :description, :user, :iban, :balance,
-                  :product, :product_number, :product_id, :has_more_pages
+                  :product, :product_number, :product_id,
+                  :currency, :has_more_pages
 
     def self.generate_url_keyword(_ = nil)
       'productos'
@@ -16,7 +17,8 @@ module BancSabadell
         balance: :balance,
         producto: :product,
         numeroProducto: :product_number,
-        numeroProductoCodificado: :product_id
+        numeroProductoCodificado: :product_id,
+        currency: :currency
       }
     end
 
