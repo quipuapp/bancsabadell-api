@@ -35,7 +35,15 @@ module BancSabadell
     autoload :Validator, 'banc_sabadell/request/validator'
   end
 
-  class BancSabadellError < StandardError; end
+  class BancSabadellError < StandardError
+    attr_accessor :payload
+
+    def initialize(message = nil, payload = nil)
+      super(message)
+      self.payload = payload
+    end
+  end
+
   class AuthenticationError < BancSabadellError; end
   class APIError < BancSabadellError; end
 

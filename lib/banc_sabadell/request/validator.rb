@@ -8,7 +8,7 @@ module BancSabadell
         raise APIError.new('Server Error') if code >= 500
       end
 
-      def validate_response_data(response_data)
+      def validate_response_data(response_data, unparsed_data = nil)
         rd = response_data
 
         if rd
@@ -20,6 +20,8 @@ module BancSabadell
                 rd["head"]["errorCode"]
             raise APIError.new(rd["head"]["descripcionError"]) unless is_bogus_error(rd)
           end
+        else
+          raise APIError.new('Empty JSON response!', unparsed_data)
         end
       end
 

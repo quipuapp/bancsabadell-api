@@ -16,13 +16,16 @@ module BancSabadell
         validator.validate_response(response)
 
         self.parsed_data = JSON.parse(response.body)
-        validator.validate_response_data(parsed_data)
+        validator.validate_response_data(parsed_data, response.body)
 
         self.parsed_data
       end
 
       def more_pages?
+        parsed_data &&
+        parsed_data.is_a?(Hash) &&
         parsed_data['head'] &&
+        parsed_data['head'].is_a?(Hash) &&
         parsed_data['head']['warnCode'] &&
         parsed_data['head']['warnCode'] == "WARN-MOV-001"
       end
