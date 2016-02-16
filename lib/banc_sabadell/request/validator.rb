@@ -6,6 +6,7 @@ module BancSabadell
 
         raise AuthenticationError.new('Unauthorized') if code == 401
         raise APIError.new('Server Error') if code >= 500
+        raise APIError.new("Wrong content_type: #{response.content_type}", response.body) if response.content_type != 'application/json'
       end
 
       def validate_response_data(response_data, unparsed_data = nil)
@@ -15,10 +16,10 @@ module BancSabadell
           if rd["data"] &&
              rd["data"].is_a?(Hash) &&
              rd["data"]["error"]
-               raise APIError.new(rd["data"]["error"])
+               raise APIError.new(rd["data"]["error"], unparsed_data)
           elsif rd["head"] &&
                 rd["head"]["errorCode"]
-            raise APIError.new(rd["head"]["descripcionError"]) unless is_bogus_error(rd)
+            raise APIError.new(rd["head"]["descripcionError"], unparsed_data) unless is_bogus_error(rd)
           end
         else
           raise APIError.new('Empty JSON response!', unparsed_data)

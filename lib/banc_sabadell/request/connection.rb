@@ -45,7 +45,13 @@ module BancSabadell
 
       def log_request_info(response)
         if @info
-          BancSabadell.logger.info "[BancSabadell] [#{current_time}] #{@info.http_method.upcase} #{@info.url} #{response.code}"
+          msg = "[BancSabadell] [#{current_time}] #{@info.http_method.upcase} #{@info.url} #{response.code}"
+
+          if @info.http_method == :put || @info.http_method == :post
+            msg += " params: #{@info.data}"
+          end
+
+          BancSabadell.logger.info msg
         end
       end
 
