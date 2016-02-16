@@ -8,7 +8,7 @@ module BancSabadell
   API_BASE = 'oauth.bancsabadell.com'
   API_SANDBOX_BASE = 'developers.bancsabadell.com'
   API_VERSION = 'v1.0.0'
-  API_THROTTLE_LIMIT = 5 # secs between requests
+  API_THROTTLE_LIMIT = 1 # secs between requests
 
   @@api_key = nil
   @@api_base = API_BASE
