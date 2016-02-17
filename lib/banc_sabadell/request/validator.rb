@@ -19,6 +19,7 @@ module BancSabadell
                raise APIError.new(rd["data"]["error"], unparsed_data)
           elsif rd["head"] &&
                 rd["head"]["errorCode"]
+            raise SessionTimeoutError.new(rd["head"]["descripcionError"], unparsed_data) if session_timed_out?(rd)
             raise APIError.new(rd["head"]["descripcionError"], unparsed_data) unless is_bogus_error(rd)
           end
         else
@@ -31,6 +32,10 @@ module BancSabadell
       def is_bogus_error(response_data)
         # How is a lack of data an error? You're killing me here guys...
         response_data["head"]["descripcionError"].include?("Z11421")
+      end
+
+      def session_timed_out?(response_data)
+        response_data["head"]["descripcionError"].include?("F0019")
       end
     end
   end

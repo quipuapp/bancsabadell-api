@@ -46,6 +46,7 @@ module BancSabadell
 
   class AuthenticationError < BancSabadellError; end
   class APIError < BancSabadellError; end
+  class SessionTimeoutError < BancSabadellError; end
 
   def self.api_key
     @@api_key
