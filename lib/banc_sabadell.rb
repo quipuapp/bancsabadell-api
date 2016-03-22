@@ -90,20 +90,34 @@ module BancSabadell
     https.use_ssl = true
     https.verify_mode = OpenSSL::SSL::VERIFY_NONE # TODO: remove it
 
-    https_request = Net::HTTP::Post.new('/AuthServerBS/oauth/token')
-    https_request.set_form_data(grant_type: 'refresh_token', refresh_token: refresh_token)
+    token_url = '/AuthServerBS/oauth/token'
+    https_request = Net::HTTP::Post.new(token_url)
+    form_data = { grant_type: 'refresh_token', refresh_token: refresh_token }
+    https_request.set_form_data(form_data)
     https_request['Authorization'] = "Basic #{Base64.encode64("#{client_id}:#{client_secret}").delete("\n")}"
 
     response = https.request(https_request)
 
     if response.code.to_s[0] == '4'
-      raise AuthenticationError.new(begin JSON.parse(response.body)['error_description'] rescue '' end)
+      error = begin
+                JSON.parse(response.body)['error_description']
+              rescue
+                ''
+              end
+
+      msg = "[BancSabadell] [#{current_time}] POST #{token_url} #{response.code} params: #{form_data}\nerror: #{error}\nresponse_body: #{response.body}"
+      BancSabadell.logger.info msg
+
+      raise AuthenticationError.new(error)
     end
 
     begin
       data = JSON.parse(response.body)
     rescue
-      raise APIError
+      msg = "[BancSabadell] [#{current_time}] POST #{token_url} #{response.code} params: #{form_data}\nerror: Invalid JSON\nresponse_body: #{response.body}"
+      BancSabadell.logger.info msg
+
+      raise APIError.new("Invalid JSON: #{response.body}")
     else
       data
     end
