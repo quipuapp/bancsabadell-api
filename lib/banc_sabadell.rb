@@ -86,6 +86,8 @@ module BancSabadell
   end
 
   def self.obtain_refresh_token_data(client_id, client_secret, refresh_token)
+    current_time = Time.now.utc.strftime("%d/%b/%Y %H:%M:%S %Z")
+
     https = Net::HTTP.new(BancSabadell.api_base, BancSabadell.api_port)
     https.use_ssl = true
     https.verify_mode = OpenSSL::SSL::VERIFY_NONE # TODO: remove it
